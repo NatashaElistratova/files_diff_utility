@@ -10,6 +10,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Install
-        run: make install
+      - run: make install
+      - run: make lint
+      - run: make test
 
