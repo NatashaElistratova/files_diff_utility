@@ -1,7 +1,7 @@
 {
   "name": "@hexlet/code",
   "version": "0.0.1",
-  "description": "[![Actions Status](https://github.com/NatashaElistratova/frontend-project-46/workflows/hexlet-check/badge.svg)](https://github.com/NatashaElistratova/frontend-project-46/actions)",
+  "description": "Command line utility finding diff of 2 files",
   "main": "index.js",
   "type": "module",
   "bin": {
@@ -14,7 +14,7 @@
     "type": "git",
     "url": "git+https://github.com/NatashaElistratova/frontend-project-46.git"
   },
-  "author": "",
+  "author": "Natasha Elistratova",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/NatashaElistratova/frontend-project-46/issues"
