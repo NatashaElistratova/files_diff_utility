@@ -4,3 +4,22 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/7f2a847e06dca7e1be69/maintainability)](https://codeclimate.com/github/NatashaElistratova/frontend-project-46/maintainability)
 
 [![Test Coverage](https://api.codeclimate.com/v1/badges/7f2a847e06dca7e1be69/test_coverage)](https://codeclimate.com/github/NatashaElistratova/frontend-project-46/test_coverage)
+
+## Intro
+This package allows you compare two files and get the diff.
+
+Node.js version > 13  is required.
+
+## Install
+
+```bash
+$ npm install @hexlet/code
+```
+## Start games
+
+```bash
+$ gendiff <file1 path> <file2 path>
+```
+
+## Demo
+[![asciicast](https://asciinema.org/a/ihZnJvozU4x7isM2KRBjoD4am.svg)](https://asciinema.org/a/ihZnJvozU4x7isM2KRBjoD4am)
