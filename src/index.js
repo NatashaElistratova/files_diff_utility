@@ -12,24 +12,32 @@ const getData = (file, ext) => {
     }
 }
 
+const plainFormatter = {
+    added: (node) => `+ ${node.key}: ${node.value}\n`,
+    deleted: (node) => `- ${node.key}: ${node.value}\n`,
+    notChanged: (node) => `  ${node.key}: ${node.value}\n`,
+    changed: (node) => `- ${node.key}: ${node.value1}\n+ ${node.key}: ${node.value2}\n`
+}
+
 const generateTree = (obj1, obj2) => {
     const mergedKeys = _.union(Object.keys(obj1), Object.keys(obj2))
     const sortedKeys = _.sortBy(mergedKeys)
+
     return sortedKeys.map(key => {
         if(obj1[key] === obj2[key]) {
-           return { key: obj1[key], type: 'not changed' } 
-        } else if (obj1[key] && !obj2[key]) {
-            return { key: obj1[key], type: 'deleted' }
-        } else if (!obj1[key] && obj2[key]) {
-            return { key: obj2[key], type: 'added' }
-        } else if (obj1[key] && obj2[key]) {
-            return { key: obj1[key], key: obj2[key], type: 'changed' }
+           return { key, value: obj1[key], type: 'notChanged' } 
+        } else if (_.has(obj1, key) && !_.has(obj2, key)) {
+            return { key, value: obj1[key], type: 'deleted' }
+        } else if (!_.has(obj1, key) && _.has(obj2, key)) {
+            return { key, value: obj2[key], type: 'added' }
+        } else if (_.has(obj1, key) && _.has(obj2, key)) {
+            return { key, value1: obj1[key], value2: obj2[key], type: 'changed' }
         }
     })
 }
 
-const formatTree = (tree) => {
-
+const format = (tree, formatter) => {
+    return tree.reduce((acc, node) => acc + formatter[node.type](node), '');
 }
 
 export default (path1, path2) => {
@@ -41,8 +49,7 @@ export default (path1, path2) => {
     const data1 = getData(file1, getFileExt(filepath1))
     const data2 = getData(file2, getFileExt(filepath2))
 
-    const diffTree = generateTree(data1, data2)
-    const formatedTree = formatTree(diffTree)
+    const diffData = generateTree(data1, data2)
 
-    console.log(diffTree)
+    return format(diffData, plainFormatter)
 }
