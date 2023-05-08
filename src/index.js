@@ -26,16 +26,18 @@ const generateTree = (obj1, obj2) => {
   return sortedKeys.map((key) => {
     if (obj1[key] === obj2[key]) {
       return { key, value: obj1[key], type: 'notChanged' };
-    } if (_.has(obj1, key) && !_.has(obj2, key)) {
+    }
+    if (_.has(obj1, key) && !_.has(obj2, key)) {
       return { key, value: obj1[key], type: 'deleted' };
-    } if (!_.has(obj1, key) && _.has(obj2, key)) {
+    }
+    if (!_.has(obj1, key) && _.has(obj2, key)) {
       return { key, value: obj2[key], type: 'added' };
-    } if (_.has(obj1, key) && _.has(obj2, key)) {
+    }
+    if (_.has(obj1, key) && _.has(obj2, key)) {
       return {
         key, value1: obj1[key], value2: obj2[key], type: 'changed',
       };
     }
-    return {};
   });
 };
 
