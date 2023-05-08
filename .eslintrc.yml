@@ -5,10 +5,11 @@ extends:
   - 'plugin:jest/recommended'
 overrides: []
 parserOptions:
-  ecmaVersion: latest
+  ecmaVersion: 2020
   sourceType: module
 rules: {
   no-console: off,
   import/extensions: off,
   consistent-return: off,
+  no-underscore-dangle: [2, { "allow": ["__filename", "__dirname"] }],
 }

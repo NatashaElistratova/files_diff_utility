@@ -1,13 +1,18 @@
+import { fileURLToPath } from 'url';
+import path from 'path';
+import fs from 'fs';
 import genDiff from '../src/index.js';
 
-const diff = `- follow: false
-  host: hexlet.io
-- proxy: 123.234.53.22
-- timeout: 50
-+ timeout: 20
-+ verbose: true
-`;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
+const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
 
 test('genDiff', () => {
-  expect(genDiff('__fixtures__/file1.json', '__fixtures__/file2.json')).toMatch(diff);
+  const filePath1 = getFixturePath('file1.json');
+  const filePath2 = getFixturePath('file2.json');
+  const fileResult = readFile('result_file.txt');
+
+  expect(genDiff(filePath1, filePath2)).toMatch(fileResult);
 });
