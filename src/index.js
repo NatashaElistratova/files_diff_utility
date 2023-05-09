@@ -1,20 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
-import yaml from 'js-yaml';
+import parser from './parsers.js';
 
 const getFullPath = (filepath) => path.resolve(process.cwd(), filepath);
 
 const getFileExt = (filepath) => filepath.split('.').at(-1);
-
-const getData = (file, ext) => {
-  if (ext === 'json') {
-    return JSON.parse(file);
-  }
-  if (ext === 'yml' || ext === 'yaml') {
-    return yaml.load(file)
-  }
-};
 
 const plainFormatter = {
   added: (node) => `+ ${node.key}: ${node.value}\n`,
@@ -37,11 +28,10 @@ const generateTree = (obj1, obj2) => {
     if (!_.has(obj1, key) && _.has(obj2, key)) {
       return { key, value: obj2[key], type: 'added' };
     }
-    if (_.has(obj1, key) && _.has(obj2, key)) {
-      return {
-        key, value1: obj1[key], value2: obj2[key], type: 'changed',
-      };
-    }
+
+    return {
+      key, value1: obj1[key], value2: obj2[key], type: 'changed',
+    };
   });
 };
 
@@ -53,8 +43,8 @@ export default (path1, path2) => {
   const file1 = fs.readFileSync(filepath1, 'utf-8');
   const file2 = fs.readFileSync(filepath2, 'utf-8');
 
-  const data1 = getData(file1, getFileExt(filepath1));
-  const data2 = getData(file2, getFileExt(filepath2));
+  const data1 = parser[getFileExt(filepath1)](file1);
+  const data2 = parser[getFileExt(filepath1)](file2);
 
   const diffData = generateTree(data1, data2);
 

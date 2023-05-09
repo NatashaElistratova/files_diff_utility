@@ -17,7 +17,6 @@ test('genDiff json', () => {
   expect(genDiff(filePath1, filePath2)).toMatch(fileResult);
 });
 
-
 test('genDiff yaml', () => {
   const filePath1 = getFixturePath('file1.yml');
   const filePath2 = getFixturePath('file2.yml');
