@@ -23,4 +23,9 @@ $ gendiff <file1 path> <file2 path>
 ```
 
 ## Demo
+
+Find diff of json files
 [![asciicast](https://asciinema.org/a/ihZnJvozU4x7isM2KRBjoD4am.svg)](https://asciinema.org/a/ihZnJvozU4x7isM2KRBjoD4am)
+
+Find diff of yml files 
+[![asciicast](https://asciinema.org/a/V5amG4opRZw5UXrQ8VPdZXmVE.svg)](https://asciinema.org/a/V5amG4opRZw5UXrQ8VPdZXmVE)
