@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
+import yaml from 'js-yaml';
 
 const getFullPath = (filepath) => path.resolve(process.cwd(), filepath);
 
@@ -9,6 +10,9 @@ const getFileExt = (filepath) => filepath.split('.').at(-1);
 const getData = (file, ext) => {
   if (ext === 'json') {
     return JSON.parse(file);
+  }
+  if (ext === 'yml' || ext === 'yaml') {
+    return yaml.load(file)
   }
 };
 
