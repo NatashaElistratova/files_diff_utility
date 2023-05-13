@@ -14,7 +14,13 @@ const plainFormatter = {
   deleted: (node, isRoot, spaceCount) => `${getIndent(isRoot, spaceCount)}- ${node.key}: ${node.value}\n`,
   notChanged: (node, isRoot, spaceCount) => `${getIndent(isRoot, spaceCount)}  ${node.key}: ${node.value}\n`,
   changed: (node, isRoot, spaceCount) => `${getIndent(isRoot, spaceCount)}- ${node.key}: ${node.value1}\n${getIndent(isRoot, spaceCount)}+ ${node.key}: ${node.value2}\n`,
-  nested: (node, isRoot, spaceCount) => `${getIndent(isRoot, spaceCount)}  ${node.key}:  {\n${getIndent(spaceCount)}  ${node.value}\n${getIndent(spaceCount)}  }\n`
+  nested: (node, isRoot, spaceCount) => `${getIndent(isRoot, spaceCount)}  ${node.key}:  {\n${getIndent(spaceCount)}  ${node.value}\n${getIndent(spaceCount)}  }\n`,
+};
+
+const format = (tree, formatter, isRoot) => {
+  const result = tree.reduce((acc, node) => acc + formatter[node.type](node, isRoot, 2), `${isRoot ? '{\n' : ''}`);
+
+  return `${result}}`;
 };
 
 const generateTree = (obj1, obj2) => {
@@ -32,24 +38,15 @@ const generateTree = (obj1, obj2) => {
       return { key, value: obj2[key], type: 'added' };
     }
     if (_.isPlainObject(obj1[key]) && _.isPlainObject(obj2[key])) {
-        const diffData = generateTree(obj1[key], obj2[key])
-        return { key, value: format(diffData, plainFormatter, false), type: 'nested' };
+      const diffData = generateTree(obj1[key], obj2[key]);
+      return { key, value: format(diffData, plainFormatter, false), type: 'nested' };
     }
 
     return {
-        key, value1: obj1[key], value2: obj2[key], type: 'changed',
+      key, value1: obj1[key], value2: obj2[key], type: 'changed',
     };
   });
 };
-
-const format = (tree, formatter, isRoot) => {
-    const result = tree.reduce((acc, node) => {
-        return acc + formatter[node.type](node, isRoot, 2)
-    }, `${isRoot ? `{\n` : ''}`)
-
-    return `${result}}`
-}
-
 
 export default (path1, path2) => {
   const filepath1 = getFullPath(path1);
