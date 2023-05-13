@@ -7,20 +7,20 @@ const getFullPath = (filepath) => path.resolve(process.cwd(), filepath);
 
 const getFileExt = (filepath) => filepath.split('.').at(-1);
 
-const getIndent = (isRoot = true, spaceCount = 4) => ' '.repeat(isRoot ? spaceCount : spaceCount - 2);
+const indent = (depth, spaceCount = 4) => ' '.repeat(depth * spaceCount - 2);
 
-const plainFormatter = {
-  added: (node, isRoot, spaceCount) => `${getIndent(isRoot, spaceCount)}+ ${node.key}: ${node.value}\n`,
-  deleted: (node, isRoot, spaceCount) => `${getIndent(isRoot, spaceCount)}- ${node.key}: ${node.value}\n`,
-  notChanged: (node, isRoot, spaceCount) => `${getIndent(isRoot, spaceCount)}  ${node.key}: ${node.value}\n`,
-  changed: (node, isRoot, spaceCount) => `${getIndent(isRoot, spaceCount)}- ${node.key}: ${node.value1}\n${getIndent(isRoot, spaceCount)}+ ${node.key}: ${node.value2}\n`,
-  nested: (node, isRoot, spaceCount) => `${getIndent(isRoot, spaceCount)}  ${node.key}:  {\n${getIndent(spaceCount)}  ${node.value}\n${getIndent(spaceCount)}  }\n`,
+const format = (tree, formatter, depth) => {
+  const result = tree.map((node) => `${formatter[node.type](node, depth, formatter)}\n`);
+
+  return `{\n${result.join('')}}`;
 };
 
-const format = (tree, formatter, isRoot) => {
-  const result = tree.reduce((acc, node) => acc + formatter[node.type](node, isRoot, 2), `${isRoot ? '{\n' : ''}`);
-
-  return `${result}}`;
+const plainFormatter = {
+  added: (node, depth) => `${indent(depth)}+ ${node.key}: ${node.value}`,
+  deleted: (node, depth) => `${indent(depth)}- ${node.key}: ${node.value}`,
+  notChanged: (node, depth) => `${indent(depth)}  ${node.key}: ${node.value}`,
+  changed: (node, depth) => `${indent(depth)}- ${node.key}: ${node.value1}\n${indent(depth)}+ ${node.key}: ${node.value2}`,
+  nested: (node, depth, formatter) => `${indent(depth)}  ${node.key}: {\n${indent(depth + 1)}${format(node.children, formatter, depth + 1)}\n${indent(depth)}}`,
 };
 
 const generateTree = (obj1, obj2) => {
@@ -38,8 +38,7 @@ const generateTree = (obj1, obj2) => {
       return { key, value: obj2[key], type: 'added' };
     }
     if (_.isPlainObject(obj1[key]) && _.isPlainObject(obj2[key])) {
-      const diffData = generateTree(obj1[key], obj2[key]);
-      return { key, value: format(diffData, plainFormatter, false), type: 'nested' };
+      return { key, children: generateTree(obj1[key], obj2[key]), type: 'nested' };
     }
 
     return {
@@ -59,5 +58,5 @@ export default (path1, path2) => {
 
   const diffData = generateTree(data1, data2);
 
-  return format(diffData, plainFormatter, true);
+  return format(diffData, plainFormatter, 1);
 };
