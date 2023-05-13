@@ -11,5 +11,6 @@ rules: {
   no-console: off,
   import/extensions: off,
   consistent-return: off,
+  no-use-before-define: off,
   no-underscore-dangle: [2, { "allow": ["__filename", "__dirname"] }],
 }

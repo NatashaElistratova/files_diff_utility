@@ -15,11 +15,27 @@ const format = (tree, formatter, depth) => {
   return `{\n${result.join('')}}`;
 };
 
-const plainFormatter = {
-  added: (node, depth) => `${indent(depth)}+ ${node.key}: ${node.value}`,
-  deleted: (node, depth) => `${indent(depth)}- ${node.key}: ${node.value}`,
-  notChanged: (node, depth) => `${indent(depth)}  ${node.key}: ${node.value}`,
-  changed: (node, depth) => `${indent(depth)}- ${node.key}: ${node.value1}\n${indent(depth)}+ ${node.key}: ${node.value2}`,
+const stringify = (data, depth) => {
+  if (!_.isPlainObject(data)) {
+    return String(data);
+  }
+
+  const result = Object.entries(data)
+    .map(([key, value]) => stylishFormatter.unchanged({ key, value }, depth));
+
+  return `{\n${result.join('')}\n${indent(depth)}}`;
+};
+
+const stylishFormatter = {
+  added: (node, depth) => `${indent(depth)}+ ${node.key}: ${stringify(node.value, depth + 1)}`,
+  deleted: (node, depth) => `${indent(depth)}- ${node.key}: ${stringify(node.value, depth + 1)}`,
+  unchanged: (node, depth) => `${indent(depth)}  ${node.key}: ${stringify(node.value, depth + 1)}`,
+  changed: (node, depth) => {
+    const data1 = `${indent(depth)}- ${node.key}: ${stringify(node.value1, depth + 1)}\n`;
+    const data2 = `${indent(depth)}+ ${node.key}: ${stringify(node.value2, depth + 1)}`;
+
+    return `${data1}${data2}`;
+  },
   nested: (node, depth, formatter) => `${indent(depth)}  ${node.key}: {\n${indent(depth + 1)}${format(node.children, formatter, depth + 1)}\n${indent(depth)}}`,
 };
 
@@ -29,7 +45,7 @@ const generateTree = (obj1, obj2) => {
 
   return sortedKeys.map((key) => {
     if (obj1[key] === obj2[key]) {
-      return { key, value: obj1[key], type: 'notChanged' };
+      return { key, value: obj1[key], type: 'unchanged' };
     }
     if (_.has(obj1, key) && !_.has(obj2, key)) {
       return { key, value: obj1[key], type: 'deleted' };
@@ -58,5 +74,5 @@ export default (path1, path2) => {
 
   const diffData = generateTree(data1, data2);
 
-  return format(diffData, plainFormatter, 1);
+  return format(diffData, stylishFormatter, 1);
 };
