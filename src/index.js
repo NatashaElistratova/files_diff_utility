@@ -9,10 +9,10 @@ const getFileExt = (filepath) => filepath.split('.').at(-1);
 
 const indent = (depth, spaceCount = 4) => ' '.repeat(depth * spaceCount - 2);
 
-const format = (tree, formatter, depth) => {
+const format = (tree, formatter, depth, isRoot = false) => {
   const result = tree.map((node) => formatter[node.type](node, depth, formatter));
 
-  return `{\n${result.join('')}`;
+  return `{\n${result.join('')}${isRoot ? '}' : ''}`;
 };
 
 const stringify = (data, depth) => {
@@ -78,5 +78,5 @@ export default (path1, path2) => {
 
   const diffData = generateDiff(data1, data2);
 
-  return format(diffData, stylishFormatter, 1);
+  return format(diffData, stylishFormatter, 1, true);
 };
