@@ -16,10 +16,10 @@ Node.js version > 13  is required.
 ```bash
 $ npm install @hexlet/code
 ```
-## Start games
+## Get package help information 
 
 ```bash
-$ gendiff <file1 path> <file2 path>
+$ gendiff -h
 ```
 
 ## Demo
@@ -29,3 +29,6 @@ Find diff of json files
 
 Find diff of yml files 
 [![asciicast](https://asciinema.org/a/V5amG4opRZw5UXrQ8VPdZXmVE.svg)](https://asciinema.org/a/V5amG4opRZw5UXrQ8VPdZXmVE)
+
+Find diff of nested files 
+[![asciicast](https://asciinema.org/a/CXA8vlxBv1ieeXyILBAyfonCv.svg)](https://asciinema.org/a/CXA8vlxBv1ieeXyILBAyfonCv)
