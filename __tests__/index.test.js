@@ -24,3 +24,11 @@ test('genDiff yaml', () => {
 
   expect(genDiff(filePath1, filePath2)).toMatch(fileResult);
 });
+
+test('genDiff yaml nested', () => {
+  const filePath1 = getFixturePath('file1_nested.yml');
+  const filePath2 = getFixturePath('file2_nested.yml');
+  const fileResult = readFile('result_nested_file.txt');
+
+  expect(genDiff(filePath1, filePath2)).toMatch(fileResult);
+});
