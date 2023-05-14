@@ -10,20 +10,20 @@ const getFileExt = (filepath) => filepath.split('.').at(-1);
 const indent = (depth, spaceCount = 4) => ' '.repeat(depth * spaceCount - 2);
 
 const format = (tree, formatter, depth) => {
-  const result = tree.map((node) => `${formatter[node.type](node, depth, formatter)}\n`);
+  const result = tree.map((node) => formatter[node.type](node, depth, formatter));
 
-  return `{\n${result.join('')}}`;
+  return `{\n${result.join('')}`;
 };
 
 const stringify = (data, depth) => {
   if (!_.isPlainObject(data)) {
-    return String(data);
+    return `${String(data)}\n`;
   }
 
   const result = Object.entries(data)
     .map(([key, value]) => stylishFormatter.unchanged({ key, value }, depth));
 
-  return `{\n${result.join('')}\n${indent(depth)}}`;
+  return `{\n${result.join('')}${indent(depth - 1)}  }\n`;
 };
 
 const stylishFormatter = {
@@ -31,15 +31,19 @@ const stylishFormatter = {
   deleted: (node, depth) => `${indent(depth)}- ${node.key}: ${stringify(node.value, depth + 1)}`,
   unchanged: (node, depth) => `${indent(depth)}  ${node.key}: ${stringify(node.value, depth + 1)}`,
   changed: (node, depth) => {
-    const data1 = `${indent(depth)}- ${node.key}: ${stringify(node.value1, depth + 1)}\n`;
+    const data1 = `${indent(depth)}- ${node.key}: ${stringify(node.value1, depth + 1)}`;
     const data2 = `${indent(depth)}+ ${node.key}: ${stringify(node.value2, depth + 1)}`;
 
     return `${data1}${data2}`;
   },
-  nested: (node, depth, formatter) => `${indent(depth)}  ${node.key}: {\n${indent(depth + 1)}${format(node.children, formatter, depth + 1)}\n${indent(depth)}}`,
+  nested: (node, depth, formatter) => {
+    const value = format(node.children, formatter, depth + 1);
+
+    return `${indent(depth)}  ${node.key}: ${value}${indent(depth)}  }\n`;
+  },
 };
 
-const generateTree = (obj1, obj2) => {
+const generateDiff = (obj1, obj2) => {
   const mergedKeys = _.union(Object.keys(obj1), Object.keys(obj2));
   const sortedKeys = _.sortBy(mergedKeys);
 
@@ -54,7 +58,7 @@ const generateTree = (obj1, obj2) => {
       return { key, value: obj2[key], type: 'added' };
     }
     if (_.isPlainObject(obj1[key]) && _.isPlainObject(obj2[key])) {
-      return { key, children: generateTree(obj1[key], obj2[key]), type: 'nested' };
+      return { key, children: generateDiff(obj1[key], obj2[key]), type: 'nested' };
     }
 
     return {
@@ -72,7 +76,7 @@ export default (path1, path2) => {
   const data1 = parser[getFileExt(filepath1)](file1);
   const data2 = parser[getFileExt(filepath1)](file2);
 
-  const diffData = generateTree(data1, data2);
+  const diffData = generateDiff(data1, data2);
 
   return format(diffData, stylishFormatter, 1);
 };
