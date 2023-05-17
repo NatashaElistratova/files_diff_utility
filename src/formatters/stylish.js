@@ -13,8 +13,8 @@ const stringify = (data, depth) => {
   return `{\n${result.join('')}${indent(depth - 1)}  }\n`;
 };
 
-const format = (tree, depth, isRoot = false) => {
-  const result = tree.map((node) => stylishFormatter[node.type](node, depth));
+const format = (diffData, depth, isRoot = false) => {
+  const result = diffData.map((node) => stylishFormatter[node.type](node, depth));
 
   return `{\n${result.join('')}${isRoot ? '}' : ''}`;
 };
@@ -36,4 +36,4 @@ const stylishFormatter = {
   },
 };
 
-export default (tree) => format(tree, 1, true);
+export default (diffData) => format(diffData, 1, true);
