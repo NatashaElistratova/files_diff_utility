@@ -1,26 +1,15 @@
-import _ from 'lodash';
+const format = (diffData, parentKeyName = '') => diffData.map((node) => {
+  if (node.type === 'unchanged') return;
+  const keyName = parentKeyName ? `${parentKeyName}.${node.key}` : node.key;
 
-const format = (data) => {
-  const result = data.map((node) => {
-    if (node.type === 'unchanged') return;
-    if (node.type !== 'nested') {
-      const keyName = `${String(data.key)}`;
-      return plainFormatter[node.type](node, keyName);
-    }
-    const keys = [];
-    keys.push(node.key);
-    return plainFormatter[node.type](node, keys.join('.'));
-  });
-
-  return result.join('');
-};
+  return plainFormatter[node.type](node, keyName);
+}).join('');
 
 const plainFormatter = {
-  added: (node, keyName) => `Property '${node.key}' was added\n`,
-  deleted: (node, keyName) => `Property '${node.key}' was removed\n`,
-//   unchanged: (node, keyName) => `Property '${keyName}' was removed`,
-  changed: (node, keyName) => `Property '${node.key}' was updated\n`,
-  nested: (node) => format(node.children),
+  added: (node, keyName) => `Property '${keyName}' was added\n`,
+  deleted: (node, keyName) => `Property '${keyName}' was removed\n`,
+  changed: (node, keyName) => `Property '${keyName}' was updated\n`,
+  nested: (node, parentKeyName) => format(node.children, parentKeyName),
 };
 
-export default (tree) => format(tree);
+export default (diffData) => format(diffData);

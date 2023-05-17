@@ -33,7 +33,6 @@ const generateDiff = (obj1, obj2) => {
 };
 
 export default (path1, path2, formatName = 'stylish') => {
-  console.log('formatName', formatName);
   const filepath1 = getFullPath(path1);
   const filepath2 = getFullPath(path2);
   const file1 = fs.readFileSync(filepath1, 'utf-8');
