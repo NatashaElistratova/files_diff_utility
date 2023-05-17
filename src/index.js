@@ -2,9 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
 import parser from './parsers.js';
-import stylish from './formatters/stylish.js';
-
-const formatters = { stylish };
+import formatters from './formatters/index.js';
 
 const getFullPath = (filepath) => path.resolve(process.cwd(), filepath);
 
