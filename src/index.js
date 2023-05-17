@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
 import parser from './parsers.js';
-import formatters from './formatters/index.js';
+import getFormatter from './formatters/index.js';
 
 const getFullPath = (filepath) => path.resolve(process.cwd(), filepath);
 
@@ -32,7 +32,7 @@ const generateDiff = (obj1, obj2) => {
   });
 };
 
-export default (path1, path2, formatName = 'stylish') => {
+export default (path1, path2, formatName) => {
   const filepath1 = getFullPath(path1);
   const filepath2 = getFullPath(path2);
   const file1 = fs.readFileSync(filepath1, 'utf-8');
@@ -43,5 +43,5 @@ export default (path1, path2, formatName = 'stylish') => {
 
   const diffData = generateDiff(data1, data2);
 
-  return formatters[formatName](diffData);
+  return getFormatter(formatName)(diffData);
 };
