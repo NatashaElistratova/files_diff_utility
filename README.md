@@ -24,11 +24,14 @@ $ gendiff -h
 
 ## Demo
 
-Find diff of json files
+Find stylish diff of json files
 [![asciicast](https://asciinema.org/a/ihZnJvozU4x7isM2KRBjoD4am.svg)](https://asciinema.org/a/ihZnJvozU4x7isM2KRBjoD4am)
 
-Find diff of yml files 
+Find stylish diff of yml files 
 [![asciicast](https://asciinema.org/a/V5amG4opRZw5UXrQ8VPdZXmVE.svg)](https://asciinema.org/a/V5amG4opRZw5UXrQ8VPdZXmVE)
 
-Find diff of nested files 
+Find stylish diff of nested files 
 [![asciicast](https://asciinema.org/a/CXA8vlxBv1ieeXyILBAyfonCv.svg)](https://asciinema.org/a/CXA8vlxBv1ieeXyILBAyfonCv)
+
+Find plain diff of nested files 
+[![asciicast](https://asciinema.org/a/RI82VzCtwOjXuE9oA1O8alk3I.svg)](https://asciinema.org/a/RI82VzCtwOjXuE9oA1O8alk3I)
