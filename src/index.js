@@ -42,6 +42,7 @@ export default (path1, path2, formatName = 'stylish') => {
   const data2 = parser[getFileExt(filepath1)](file2);
 
   const diffData = generateDiff(data1, data2);
+  const formatter = getFormatter(formatName);
 
-  return getFormatter(formatName)(diffData);
+  return formatter(diffData);
 };

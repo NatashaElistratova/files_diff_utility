@@ -24,3 +24,11 @@ test('genDiff plain', () => {
 
   expect(genDiff(filePath1, filePath2, 'plain')).toMatch(fileResult);
 });
+
+test('genDiff json', () => {
+  const filePath1 = getFixturePath('file1.yml');
+  const filePath2 = getFixturePath('file2.yml');
+  const fileResult = readFile('result_file.json');
+
+  expect(genDiff(filePath1, filePath2, 'json')).toMatch(fileResult);
+});
