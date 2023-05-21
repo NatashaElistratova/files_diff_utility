@@ -10,25 +10,24 @@ const formatValue = (value) => {
 };
 
 const format = (diffData, parentKeyName = '') => {
-  const result = diffData.map((node, index) => {
+  const result = diffData.map((node) => {
     if (node.type === 'unchanged') return;
     const keyName = parentKeyName ? `${parentKeyName}.${node.key}` : node.key;
-    const newLineSymbol = index === diffData.length - 1 ? '' : '\n';
 
-    return `${plainFormatter[node.type](node, keyName)}${newLineSymbol}`;
+    return plainFormatter[node.type](node, keyName);
   });
 
   return result.join('');
 };
 
 const plainFormatter = {
-  added: (node, keyName) => `Property '${keyName}' was added with value: ${formatValue(node.value)}`,
-  deleted: (node, keyName) => `Property '${keyName}' was removed`,
+  added: (node, keyName) => `Property '${keyName}' was added with value: ${formatValue(node.value)}\n`,
+  deleted: (node, keyName) => `Property '${keyName}' was removed\n`,
   changed: (node, keyName) => {
     const value1 = formatValue(node.value1);
     const value2 = formatValue(node.value2);
 
-    return `Property '${keyName}' was updated. From ${value1} to ${value2}`;
+    return `Property '${keyName}' was updated. From ${value1} to ${value2}\n`;
   },
   nested: (node, parentKeyName) => format(node.children, parentKeyName),
 };
