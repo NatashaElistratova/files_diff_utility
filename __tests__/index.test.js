@@ -21,7 +21,7 @@ test('genDiff plain', () => {
   const filePath1 = getFixturePath('file1.yml');
   const filePath2 = getFixturePath('file2.yml');
   const fileResult = readFile('result_plain_file.txt');
-  console.log(genDiff(filePath1, filePath2, 'plain'));
+
   expect(genDiff(filePath1, filePath2, 'plain')).toEqual(fileResult);
 });
 
