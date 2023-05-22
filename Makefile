@@ -2,7 +2,7 @@ install:
 	npm install
 
 lint:
-	npx eslint . --fix
+	npx eslint .
 
 test:
 	npm test
