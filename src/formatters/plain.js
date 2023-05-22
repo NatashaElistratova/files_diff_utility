@@ -14,7 +14,7 @@ const formatValue = (value) => {
 
 const format = (diffData, parentKeyName = '') => {
   const result = diffData.map((node) => {
-    if (node.type !== 'unchanged') return;
+    if (node.type === 'unchanged') return;
     const keyName = parentKeyName ? `${parentKeyName}.${node.key}` : node.key;
 
     return plainFormatter[node.type](node, keyName);
