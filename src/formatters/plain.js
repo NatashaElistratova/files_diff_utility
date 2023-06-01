@@ -14,7 +14,6 @@ const formatValue = (value) => {
 
 const format = (diffData, parentKeyName = '') => {
   const result = diffData.map((node) => {
-    if (node.type === 'unchanged') return;
     const keyName = parentKeyName ? `${parentKeyName}.${node.key}` : node.key;
 
     return plainFormatter[node.type](node, keyName);
@@ -33,6 +32,7 @@ const plainFormatter = {
     return `Property '${keyName}' was updated. From ${value1} to ${value2}\n`;
   },
   nested: (node, parentKeyName) => format(node.children, parentKeyName),
+  unchanged: () => { },
 };
 
 export default (diffData) => format(diffData).replace(/\n$/, '');
