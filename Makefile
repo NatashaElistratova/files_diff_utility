@@ -12,4 +12,7 @@ test-coverage:
 
 publish:
 	npm publish --dry-run
+
+hello:
+	node bin/hello.js
 	
