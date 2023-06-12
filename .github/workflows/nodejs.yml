@@ -11,9 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: make install
+      - run: make hello
       - run: make lint
       - run: make test
-      - run: make hello
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v2.7.4
         env:
