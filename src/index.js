@@ -33,13 +33,13 @@ const generateDiff = (obj1, obj2) => {
 };
 
 export default (path1, path2, formatName = 'stylish') => {
-  const filepath1 = getFullPath(path1);
-  const filepath2 = getFullPath(path2);
-  const fileContent1 = fs.readFileSync(filepath1, 'utf-8');
-  const fileContent2 = fs.readFileSync(filepath2, 'utf-8');
+  // const filepath1 = getFullPath(path1);
+  // const filepath2 = getFullPath(path2);
+  const fileContent1 = fs.readFileSync(path1, 'utf-8');
+  const fileContent2 = fs.readFileSync(path2, 'utf-8');
 
-  const data1 = parser[getFileExt(filepath1)](fileContent1);
-  const data2 = parser[getFileExt(filepath1)](fileContent2);
+  const data1 = parser[getFileExt(path1)](fileContent1);
+  const data2 = parser[getFileExt(path2)](fileContent2);
 
   const diffData = generateDiff(data1, data2);
   const formatter = getFormatter(formatName);
