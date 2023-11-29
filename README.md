@@ -14,7 +14,7 @@ Node.js version > 13  is required.
 ## Install
 
 ```bash
-$ npm install @hexlet/code
+$ npm install
 ```
 ## Get package help information 
 
